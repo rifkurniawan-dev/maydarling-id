@@ -1,15 +1,39 @@
 import React, { useState } from "react";
+import { artikelSamping, beritaMaydarling, edukasi } from "./Artikel";
 import "../index.css";
 
 function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
+  // Fungsi pencarian artikel lokal
+  const searchLocalArticles = (query) => {
+    const semuaArtikel = [...artikelSamping, ...beritaMaydarling, ...edukasi];
+    const hasil = semuaArtikel.filter(item =>
+      item.judul.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (hasil.length > 0) {
+      return hasil.map(item => `• ${item.judul}\n👉 ${item.link}`).join("\n\n");
+    } else {
+      return null; // tidak ditemukan
+    }
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = { text: input, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
+
+    // Cek apakah pertanyaan terkait artikel
+    const artikelResult = searchLocalArticles(input);
+    if (artikelResult) {
+      const botMessage = { text: artikelResult, sender: "bot" };
+      setMessages((prev) => [...prev, botMessage]);
+      setInput("");
+      return;
+    }
 
     try {
       const response = await fetch(
@@ -21,7 +45,6 @@ function Chatbot() {
         }
       );
 
-      // Perbaikan tambahan: cek status HTTP
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -43,7 +66,7 @@ function Chatbot() {
       <div className="chat-messages">
         {messages.map((msg, idx) => (
           <div key={idx} className={`message ${msg.sender}`}>
-            {msg.text}
+            {msg.text.split('\n').map((line, i) => <p key={i}>{line}</p>)}
           </div>
         ))}
       </div>
