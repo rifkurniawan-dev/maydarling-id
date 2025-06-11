@@ -13,7 +13,7 @@ function Chatbot() {
 
     try {
       const response = await fetch(
-        "https://chatbot-production-ced0.up.streamlit.io/chat",
+        "https://chatbot-production-ced0.up.vercel.com/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
