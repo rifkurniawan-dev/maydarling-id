@@ -9,17 +9,18 @@ function Chatbot() {
     if (!input.trim()) return;
 
     const userMessage = { text: input, sender: "user" };
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const response = await fetch(
-        "chatbot-production-ced0.up.railway.app/chat",
+        "https://chatbot-production-ced0.up.railway.app/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: input }),
         }
       );
+
       const data = await response.json();
       const botMessage = { text: data.answer, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);

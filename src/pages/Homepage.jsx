@@ -234,7 +234,7 @@ function Home() {
       >
         <button
           onClick={handleClick}
-          className="btn btn-dark rounded-circle shadow p-3"
+          className="btn btn-dark rounded-circle shadimportow p-3"
           title="Open Chatbot"
         >
           <img
