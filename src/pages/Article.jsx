@@ -218,4 +218,4 @@ const Artikel = () => {
 
 export default Artikel;
 
-export { Artikel, Berita, edukasi };
+export { Article, Event };
