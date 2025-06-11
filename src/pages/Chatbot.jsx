@@ -13,7 +13,7 @@ function Chatbot() {
 
     try {
       const response = await fetch(
-        "chatbot-production-ced0.up.vercel.com/chat",
+        "https://chatbot-production-ced0.up.vercel.com/chat",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
