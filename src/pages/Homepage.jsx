@@ -215,7 +215,7 @@ function Home() {
     { name: "Arif", img: arifImg },
   ];
 
-  // eslint-disable-next-line to the line before.
+  // eslint-disable-next-line no-unused-vars
   const FloatingButton = ({ floatIcon }) => {
     const navigate = useNavigate();
 
