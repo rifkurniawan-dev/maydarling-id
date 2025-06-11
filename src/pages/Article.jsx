@@ -217,3 +217,5 @@ const Artikel = () => {
 };
 
 export default Artikel;
+
+export { artikelSamping, beritaMaydarling, edukasi };
