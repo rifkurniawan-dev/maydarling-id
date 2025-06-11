@@ -9,7 +9,7 @@ function Chatbot() {
     if (!input.trim()) return;
 
     const userMessage = { text: input, sender: "user" };
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const response = await fetch(
@@ -20,11 +20,18 @@ function Chatbot() {
           body: JSON.stringify({ message: input }),
         }
       );
+
+      // Perbaikan tambahan: cek status HTTP
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       const botMessage = { text: data.answer, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      const botMessage = { text: "Maaf, terjadi kesalahan.", sender: "bot" };
+      console.error("Fetch error:", error);
+      const botMessage = { text: "Maaf, terjadi kesalahan di server.", sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     }
 
