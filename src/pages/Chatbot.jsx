@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { artikelSamping, beritaMaydarling, edukasi } from "./Artikel";
+import { artikelSamping, beritaMaydarling, edukasi } from "./Article";
 import "../index.css";
 
 function Chatbot() {
