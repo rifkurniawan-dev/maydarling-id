@@ -198,7 +198,7 @@ return () => {
     { name: 'Arif',  img: arifImg },
   ];
 
-
+// eslint-disable-next-line to the line before.
   const FloatingButton = ({ floatIcon }) => {
     const navigate = useNavigate();
   
