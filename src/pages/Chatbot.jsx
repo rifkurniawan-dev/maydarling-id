@@ -6,30 +6,45 @@ function Chatbot() {
   const [input, setInput] = useState("");
 
   const sendMessage = async () => {
-    if (!input.trim()) return;
+  if (!input.trim()) return;
 
-    const userMessage = { text: input, sender: "user" };
-    setMessages([...messages, userMessage]);
+  const userMessage = { text: input, sender: "user" };
+  setMessages([...messages, userMessage]);
 
+  try {
+    const response = await fetch(
+      "https://chatbot-production-ced0.up.vercel.com/chat",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input }),
+      }
+    );
+
+    // ambil response text dulu
+    const text = await response.text();
+    console.log("API Response (raw text):", text);
+
+    // coba parse json manual
+    let data;
     try {
-      const response = await fetch(
-        "https://chatbot-production-ced0.up.vercel.com/chat",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: input }),
-        }
-      );
-      const data = await response.json();
-      const botMessage = { text: data.answer, sender: "bot" };
-      setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
-      const botMessage = { text: "Maaf, terjadi kesalahan.", sender: "bot" };
-      setMessages((prev) => [...prev, botMessage]);
+      data = JSON.parse(text);
+      console.log("Parsed JSON:", data);
+    } catch (parseError) {
+      console.error("Gagal parsing JSON:", parseError);
+      throw new Error("Response bukan JSON");
     }
 
-    setInput("");
-  };
+    const botMessage = { text: data.answer, sender: "bot" };
+    setMessages((prev) => [...prev, botMessage]);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    const botMessage = { text: "Maaf, terjadi kesalahan.", sender: "bot" };
+    setMessages((prev) => [...prev, botMessage]);
+  }
+
+  setInput("");
+};
 
   return (
     <div className="chatbot-container">
