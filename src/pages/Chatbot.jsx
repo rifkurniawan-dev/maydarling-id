@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../../index.css";
-
+import "../index.css";
 
 function Chatbot() {
   const [messages, setMessages] = useState([]);
@@ -13,11 +12,14 @@ function Chatbot() {
     setMessages([...messages, userMessage]);
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
-      });
+      const response = await fetch(
+        "https://chatbot-production-ced0.up.vercel.com/chat",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: input }),
+        }
+      );
       const data = await response.json();
       const botMessage = { text: data.answer, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
