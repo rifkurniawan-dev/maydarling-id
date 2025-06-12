@@ -9,7 +9,7 @@ function Chatbot() {
     if (!input.trim()) return;
 
     const userMessage = { text: input, sender: "user" };
-    setMessages([...messages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
 
     try {
       const response = await fetch(
@@ -32,23 +32,59 @@ function Chatbot() {
   };
 
   return (
-    <div className="chatbot-container">
-      <div className="chat-messages">
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.sender}`}>
-            {msg.text}
+    <div
+      style={{
+        position: "fixed",
+        bottom: "1.5rem",
+        right: "1.5rem",
+        width: "300px",
+        zIndex: 1050,
+      }}
+    >
+      <div className="card shadow">
+        <div className="card-header bg-primary text-white">
+          <h5 className="mb-0">Chatbot</h5>
+        </div>
+        <div
+          className="card-body"
+          style={{ height: "300px", overflowY: "auto" }}
+        >
+          {messages.map((msg, idx) => (
+            <div
+              key={idx}
+              className={`d-flex mb-2 ${
+                msg.sender === "user"
+                  ? "justify-content-end"
+                  : "justify-content-start"
+              }`}
+            >
+              <div
+                className={`p-2 rounded ${
+                  msg.sender === "user"
+                    ? "bg-success text-white"
+                    : "bg-light text-dark"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="card-footer">
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Ketik pesan..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+            />
+            <button className="btn btn-primary" onClick={sendMessage}>
+              Kirim
+            </button>
           </div>
-        ))}
-      </div>
-      <div className="input-area">
-        <input
-          type="text"
-          value={input}
-          placeholder="Ketik pesan..."
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-        />
-        <button onClick={sendMessage}>Kirim</button>
+        </div>
       </div>
     </div>
   );
