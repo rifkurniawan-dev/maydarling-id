@@ -5,7 +5,7 @@ function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  const sendMessage = async () => {
+ const sendMessage = async () => {
   if (!input.trim()) return;
 
   const userMessage = { text: input, sender: "user" };
@@ -21,25 +21,23 @@ function Chatbot() {
       }
     );
 
-    // ambil response text dulu
     const text = await response.text();
-    console.log("API Response (raw text):", text);
+    console.log("API Response (raw text):", text);  // LOG RAW RESPONSE
 
-    // coba parse json manual
-    let data;
     try {
-      data = JSON.parse(text);
-      console.log("Parsed JSON:", data);
+      const data = JSON.parse(text);
+      console.log("Parsed JSON:", data);  // LOG PARSED JSON
+      const botMessage = { text: data.answer, sender: "bot" };
+      setMessages((prev) => [...prev, botMessage]);
     } catch (parseError) {
       console.error("Gagal parsing JSON:", parseError);
-      throw new Error("Response bukan JSON");
+      const botMessage = { text: "Maaf, terjadi kesalahan saat parsing JSON.", sender: "bot" };
+      setMessages((prev) => [...prev, botMessage]);
     }
 
-    const botMessage = { text: data.answer, sender: "bot" };
-    setMessages((prev) => [...prev, botMessage]);
   } catch (error) {
-    console.error("Error fetching data:", error);
-    const botMessage = { text: "Maaf, terjadi kesalahan.", sender: "bot" };
+    console.error("Fetch error:", error);
+    const botMessage = { text: "Maaf, terjadi kesalahan koneksi.", sender: "bot" };
     setMessages((prev) => [...prev, botMessage]);
   }
 
