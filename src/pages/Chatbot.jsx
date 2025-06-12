@@ -26,7 +26,7 @@ function Chatbot() {
 
     try {
       const data = JSON.parse(text);
-      console.log("Parsed JSON:", data);  // LOG PARSED JSON
+      console.log("App JSON:", data);  // LOG PARSED JSON
       const botMessage = { text: data.answer, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (parseError) {
