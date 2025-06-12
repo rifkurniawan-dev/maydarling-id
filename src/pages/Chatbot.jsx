@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../../index.css";
 
+
 function Chatbot() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -9,7 +10,7 @@ function Chatbot() {
     if (!input.trim()) return;
 
     const userMessage = { text: input, sender: "user" };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages([...messages, userMessage]);
 
     try {
       const response = await fetch("/api/chat", {
@@ -17,12 +18,11 @@ function Chatbot() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),
       });
-
       const data = await response.json();
-      const botMessage = { text: data.reply, sender: "bot" };
+      const botMessage = { text: data.answer, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      const botMessage = { text: "Maaf, terjadi kesalahan koneksi.", sender: "bot" };
+      const botMessage = { text: "Maaf, terjadi kesalahan.", sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     }
 
